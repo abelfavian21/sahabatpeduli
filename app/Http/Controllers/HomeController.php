@@ -12,9 +12,14 @@ class HomeController extends Controller
     public function index()
     {
         return view('home', [
-            'categories' => Category::withCount(['campaigns' => fn ($q) => $q->active()])->get(),
+            'hero' => Campaign::active()->with('category')
+                ->orderByRaw('CASE WHEN image IS NOT NULL OR video IS NOT NULL THEN 0 ELSE 1 END')
+                ->orderByDesc('is_urgent')->latest()->take(3)->get(),
+            'categories' => Category::withCount(['campaigns' => fn ($q) => $q->active()])
+                ->withSum(['campaigns as raised' => fn ($q) => $q->active()], 'collected')->get()
+                ->each(fn ($c) => $c->fallback_cover = Campaign::active()->where('category_id', $c->id)->whereNotNull('image')->latest()->value('image')),
             'campaigns' => Campaign::active()->with('category')->orderByDesc('is_urgent')->latest()->take(3)->get(),
-            'articles' => Article::whereNotNull('published_at')->latest('published_at')->take(3)->get(),
+            'articles' => Article::published()->latest('published_at')->take(3)->get(),
             'stats' => [
                 'collected' => Campaign::sum('collected'),
                 'donors' => Donation::where('status', 'paid')->count(),

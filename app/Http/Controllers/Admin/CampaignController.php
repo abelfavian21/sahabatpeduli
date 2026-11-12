@@ -28,6 +28,9 @@ class CampaignController extends Controller
         if ($r->hasFile('image')) {
             $d['image'] = $r->file('image')->store('campaigns', 'public');
         }
+        if ($r->hasFile('video')) {
+            $d['video'] = $r->file('video')->store('campaigns', 'public');
+        }
         Campaign::create($d);
 
         return redirect()->route('admin.campaigns.index')->with('ok', 'Kampanye dibuat.');
@@ -48,6 +51,13 @@ class CampaignController extends Controller
             $this->deleteImage($campaign);
             $d['image'] = null;
         }
+        if ($r->hasFile('video')) {
+            $this->deleteFile($campaign->video);
+            $d['video'] = $r->file('video')->store('campaigns', 'public');
+        } elseif ($r->boolean('remove_video')) {
+            $this->deleteFile($campaign->video);
+            $d['video'] = null;
+        }
         $campaign->update($d);
 
         return redirect()->route('admin.campaigns.index')->with('ok', 'Kampanye diperbarui.');
@@ -56,6 +66,7 @@ class CampaignController extends Controller
     public function destroy(Campaign $campaign)
     {
         $this->deleteImage($campaign);
+        $this->deleteFile($campaign->video);
         $campaign->delete();
 
         return back()->with('ok', 'Kampanye dihapus.');
@@ -70,12 +81,13 @@ class CampaignController extends Controller
             'excerpt' => 'required|string|max:255',
             'story' => 'required|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
+            'video' => 'nullable|mimetypes:video/mp4,video/webm|max:20480',
             'target' => 'required|integer|min:10000',
             'collected' => 'nullable|integer|min:0',
             'deadline' => 'required|date',
             'status' => 'required|in:draft,active,closed',
         ]);
-        unset($d['image']);
+        unset($d['image'], $d['video']);
         $d['collected'] = $d['collected'] ?? 0;
         $d['is_urgent'] = $r->boolean('is_urgent');
         $d['is_verified'] = $r->boolean('is_verified');
@@ -98,6 +110,13 @@ class CampaignController extends Controller
     {
         if ($c->image) {
             Storage::disk('public')->delete($c->image);
+        }
+    }
+
+    private function deleteFile(?string $path): void
+    {
+        if ($path) {
+            Storage::disk('public')->delete($path);
         }
     }
 }
