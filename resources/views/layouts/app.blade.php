@@ -50,7 +50,7 @@
             <span class="hidden sm:inline">Sahabat Peduli</span>
         </a>
         <nav class="hidden gap-8 text-sm font-medium md:flex">
-            @foreach([['Kampanye', route('campaigns.index')], ['Berita', route('articles.index')], ['Transparansi', route('home').'#transparansi'], ['Tentang', route('home').'#tentang']] as [$l, $u])
+            @foreach([['Kampanye', route('campaigns.index')], ['Berita', route('articles.index')], ['Transparansi', route('home').'#transparansi'], ['Tentang', route('home').'#tentang'], ['Ajukan kampanye', route('requests.create')]] as [$l, $u])
                 <a href="{{ $u }}" class="group relative py-1">{{ $l }}<span class="absolute inset-x-0 -bottom-0.5 h-0.5 origin-left scale-x-0 rounded bg-brand transition duration-300 ease-sp group-hover:scale-x-100"></span></a>
             @endforeach
         </nav>

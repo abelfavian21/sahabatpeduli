@@ -16,7 +16,8 @@ class HomeController extends Controller
                 ->orderByRaw('CASE WHEN image IS NOT NULL OR video IS NOT NULL THEN 0 ELSE 1 END')
                 ->orderByDesc('is_urgent')->latest()->take(3)->get(),
             'categories' => Category::withCount(['campaigns' => fn ($q) => $q->active()])
-                ->withSum(['campaigns as raised' => fn ($q) => $q->active()], 'collected')->get(),
+                ->withSum(['campaigns as raised' => fn ($q) => $q->active()], 'collected')->get()
+                ->each(fn ($c) => $c->fallback_cover = Campaign::active()->where('category_id', $c->id)->whereNotNull('image')->latest()->value('image')),
             'campaigns' => Campaign::active()->with('category')->orderByDesc('is_urgent')->latest()->take(3)->get(),
             'articles' => Article::published()->latest('published_at')->take(3)->get(),
             'stats' => [

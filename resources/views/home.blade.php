@@ -49,38 +49,40 @@
             <h2 class="font-display text-4xl font-extrabold sm:text-5xl">Bidang kepedulian</h2>
             <p class="mt-2 max-w-md text-neutral-600">Pilih jalur kebaikan yang paling dekat denganmu.</p>
         </div>
-        <a href="{{ route('campaigns.index') }}" class="rounded-full px-5 py-2.5 text-sm font-medium ring-1 ring-black/10 transition hover:bg-ink hover:text-white">Semua kampanye</a>
+        <a href="{{ route('campaigns.index') }}" class="rounded-full bg-white px-5 py-2.5 text-sm font-medium ring-1 ring-black/10 transition hover:bg-ink hover:text-white">Semua kampanye</a>
     </div>
     @php
-        $tint = ['bencana' => 'from-sky-100 to-sky-300', 'pendidikan' => 'from-amber-100 to-amber-300', 'kesehatan' => 'from-rose-100 to-rose-300', 'kemanusiaan' => 'from-emerald-100 to-emerald-300'];
+        $wipe = ['bencana' => 'bg-sky-200', 'pendidikan' => 'bg-amber-200', 'kesehatan' => 'bg-rose-200', 'kemanusiaan' => 'bg-emerald-200'];
         $desc = ['bencana' => 'Banjir, longsor, gempa. Bantuan cepat untuk korban terdampak.', 'pendidikan' => 'Beasiswa, perlengkapan sekolah, dan akses belajar untuk anak.', 'kesehatan' => 'Biaya berobat dan operasi bagi yang tak mampu.', 'kemanusiaan' => 'Pangan dan kebutuhan dasar bagi sesama.'];
     @endphp
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:auto-rows-[13.5rem]">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         @foreach($categories as $i => $cat)
-            @php
-                $size = $i === 0 ? 'big' : ($i === 1 ? 'wide' : 'small');
-                $span = ['big' => 'sm:col-span-2 lg:row-span-2', 'wide' => 'sm:col-span-2', 'small' => ''][$size];
-                $icon = ['big' => 'h-52 w-52 right-4 bottom-4 sm:h-64 sm:w-64', 'wide' => 'h-32 w-32 right-8 top-1/2 -translate-y-1/2', 'small' => 'h-20 w-20 right-4 top-4'][$size];
-            @endphp
-            <div class="reveal {{ $span }}" style="--d: {{ $i * 100 }}ms">
+            <div class="reveal" style="--d: {{ $i * 90 }}ms">
                 <a href="{{ route('campaigns.index', ['category' => $cat->slug]) }}"
-                   class="group relative flex h-full min-h-[13.5rem] flex-col justify-between overflow-hidden rounded-[2rem] bg-gradient-to-br {{ $tint[$cat->slug] ?? 'from-neutral-100 to-neutral-300' }} p-6 transition duration-300 ease-sp hover:-translate-y-1 hover:shadow-2xl">
-                    <span class="absolute -right-10 -top-10 h-44 w-44 rounded-full bg-white/40"></span>
-                    <span class="absolute -bottom-14 -left-10 h-40 w-40 rounded-full bg-white/25"></span>
-                    <span class="absolute transition duration-500 ease-sp group-hover:-rotate-3 group-hover:scale-105 {{ $icon }}">@include('partials.icon', ['name' => $cat->icon_name, 'class' => 'h-full w-full drop-shadow-xl'])</span>
+                   class="group relative flex h-full min-h-[15rem] flex-col justify-between overflow-hidden rounded-[1.75rem] bg-white p-6 ring-1 ring-black/5 transition duration-300 hover:shadow-xl">
+                    {{-- sapuan warna dari bawah saat hover --}}
+                    <span class="absolute inset-0 origin-bottom scale-y-0 {{ $wipe[$cat->slug] ?? 'bg-neutral-200' }} transition duration-500 ease-sp group-hover:scale-y-100"></span>
 
-                    <div class="relative">
-                        <h3 class="font-display font-extrabold {{ $size === 'big' ? 'text-4xl' : 'text-2xl' }}">{{ $cat->name }}</h3>
-                        @if($size !== 'small')<p class="mt-2 max-w-[15rem] text-sm text-ink/70">{{ $desc[$cat->slug] ?? '' }}</p>@endif
-                    </div>
-                    <div class="relative flex items-end justify-between gap-3">
-                        <div>
-                            <span class="rounded-full bg-ink px-3 py-1 text-xs text-white">{{ $cat->campaigns_count }} kampanye aktif</span>
-                            @if($size === 'big' && $cat->raised)<p class="mt-3 text-sm"><b>Rp {{ number_format($cat->raised, 0, ',', '.') }}</b> <span class="text-ink/70">terkumpul</span></p>@endif
-                        </div>
-                        <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-ink transition duration-500 ease-sp group-hover:rotate-45 group-hover:bg-ink group-hover:text-white">
-                            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg>
+                    <div class="relative flex items-start justify-between">
+                        <span class="grid h-12 w-12 place-items-center rounded-2xl bg-neutral-100 transition duration-500 ease-sp group-hover:-rotate-6 group-hover:scale-110 group-hover:bg-white/80">
+                            @include('partials.icon', ['name' => $cat->icon_name, 'class' => 'h-7 w-7'])
                         </span>
+                        <span class="grid h-10 w-10 place-items-center rounded-full ring-1 ring-black/10 transition duration-500 ease-sp group-hover:rotate-45 group-hover:bg-ink group-hover:text-white group-hover:ring-ink">
+                            <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg>
+                        </span>
+                    </div>
+
+                    <div class="relative mt-8">
+                        {{-- teks bergulir: salinan pertama keluar, salinan kedua masuk --}}
+                        <div class="h-9 overflow-hidden font-display text-3xl font-extrabold leading-9">
+                            <span class="block transition duration-500 ease-sp group-hover:-translate-y-full">{{ $cat->name }}</span>
+                            <span class="block transition duration-500 ease-sp group-hover:-translate-y-full" aria-hidden="true">{{ $cat->name }}</span>
+                        </div>
+                        <p class="mt-2 line-clamp-2 text-sm text-neutral-600 transition duration-300 group-hover:text-ink">{{ $cat->description ?: ($desc[$cat->slug] ?? '') }}</p>
+                        <p class="mt-4 flex items-center gap-2 text-xs font-medium">
+                            <span class="rounded-full bg-ink px-2.5 py-1 text-white">{{ $cat->campaigns_count }} kampanye</span>
+                            <span class="text-neutral-500 transition group-hover:text-ink">Rp {{ number_format($cat->raised ?? 0, 0, ',', '.') }}</span>
+                        </p>
                     </div>
                 </a>
             </div>
@@ -123,6 +125,6 @@
     <span class="morph absolute -bottom-20 -right-10 h-72 w-72 bg-white/60" style="animation-delay:-6s"></span>
     <h2 class="relative mx-auto max-w-3xl font-display text-4xl font-extrabold leading-tight sm:text-6xl">Ruang kita peduli ke sesama manusia</h2>
     <p class="relative mx-auto mt-5 max-w-xl text-lg text-neutral-700">Setiap kampanye diverifikasi tim kami. Laporan penggunaan dana dipublikasikan.</p>
-    <div class="relative mt-9 inline-block"><a href="{{ route('campaigns.index') }}" class="inline-block rounded-full bg-ink px-9 py-4 font-medium text-white transition hover:bg-brand">Mulai berdonasi</a></div>
+    <div class="relative mt-9 flex flex-wrap justify-center gap-3"><a href="{{ route('campaigns.index') }}" class="inline-block rounded-full bg-ink px-9 py-4 font-medium text-white transition hover:bg-brand">Mulai berdonasi</a><a href="{{ route('requests.create') }}" class="inline-block rounded-full bg-white px-9 py-4 font-medium ring-1 ring-black/10 transition hover:bg-ink hover:text-white">Ajukan kampanye</a></div>
 </section>
 @endsection
