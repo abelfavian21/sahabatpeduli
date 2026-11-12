@@ -37,6 +37,14 @@
         </div>
     </div>
 
+    <div class="md:col-span-2">
+        <span class="mb-1 block text-sm font-medium">Video footage (opsional, mp4/webm, maks 20 MB)</span>
+        @if($campaign->video_url)<video src="{{ $campaign->video_url }}" muted controls class="mb-2 h-32 rounded-xl bg-neutral-100"></video>@endif
+        <input type="file" name="video" accept="video/mp4,video/webm" class="text-sm">
+        @if($edit && $campaign->video)<label class="mt-2 flex items-center gap-2 text-sm"><input type="checkbox" name="remove_video" value="1"> Hapus video saat ini</label>@endif
+        <p class="mt-1 text-xs text-neutral-500">Tampil di beranda dan halaman kampanye. Video diputar otomatis tanpa suara di beranda.</p>
+    </div>
+
     <label><span class="mb-1 block text-sm font-medium">Target dana (Rp)</span>
         <input name="target" type="number" min="10000" value="{{ old('target', $campaign->target) }}" required class="{{ $in }}"></label>
 

@@ -13,7 +13,7 @@
     <aside class="bg-white p-4 lg:sticky lg:top-0 lg:h-screen">
         <a href="{{ route('admin.dashboard') }}" class="mb-6 block text-lg font-bold">Sahabat Peduli <span class="block text-xs font-normal text-neutral-500">Panel admin</span></a>
         <nav class="flex gap-2 text-sm lg:flex-col">
-            @foreach([['admin.dashboard', 'Dashboard'], ['admin.campaigns.index', 'Kampanye'], ['admin.donations.index', 'Donasi']] as [$r, $l])
+            @foreach([['admin.dashboard', 'Dashboard'], ['admin.campaigns.index', 'Kampanye'], ['admin.articles.index', 'Berita'], ['admin.donations.index', 'Donasi']] as [$r, $l])
                 <a href="{{ route($r) }}" class="rounded-xl px-4 py-2.5 transition {{ request()->routeIs(str_replace('.index', '.*', $r)) ? 'bg-brand text-white' : 'hover:bg-neutral-100' }}">{{ $l }}</a>
             @endforeach
             <a href="{{ route('home') }}" target="_blank" class="rounded-xl px-4 py-2.5 hover:bg-neutral-100">Lihat situs</a>

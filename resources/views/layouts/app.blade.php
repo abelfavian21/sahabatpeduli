@@ -14,6 +14,13 @@
         } } }
     </script>
     <style>
+        body {
+            background-image:
+                radial-gradient(60rem 36rem at 0% 0%, rgba(217, 247, 109, .5), transparent 65%),
+                radial-gradient(50rem 36rem at 100% 12%, rgba(59, 142, 255, .13), transparent 65%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 22v12M22 28h12' stroke='%233b8eff' stroke-opacity='.17' stroke-width='2.5' stroke-linecap='round'/%3E%3Cg fill='%23a8d400' fill-opacity='.35'%3E%3Ccircle cx='0' cy='0' r='1.8'/%3E%3Ccircle cx='56' cy='0' r='1.8'/%3E%3Ccircle cx='0' cy='56' r='1.8'/%3E%3Ccircle cx='56' cy='56' r='1.8'/%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: no-repeat, no-repeat, repeat;
+        }
         .bar { width: var(--w); }
         .ease-sp { transition-timing-function: cubic-bezier(.2,.8,.2,1); }
         .morph { border-radius: 60% 40% 55% 45% / 50% 55% 45% 50%; }
@@ -43,7 +50,7 @@
             <span class="hidden sm:inline">Sahabat Peduli</span>
         </a>
         <nav class="hidden gap-8 text-sm font-medium md:flex">
-            @foreach([['Kampanye', route('campaigns.index')], ['Berita', route('home').'#berita'], ['Transparansi', route('home').'#transparansi'], ['Tentang', route('home').'#tentang']] as [$l, $u])
+            @foreach([['Kampanye', route('campaigns.index')], ['Berita', route('articles.index')], ['Transparansi', route('home').'#transparansi'], ['Tentang', route('home').'#tentang']] as [$l, $u])
                 <a href="{{ $u }}" class="group relative py-1">{{ $l }}<span class="absolute inset-x-0 -bottom-0.5 h-0.5 origin-left scale-x-0 rounded bg-brand transition duration-300 ease-sp group-hover:scale-x-100"></span></a>
             @endforeach
         </nav>

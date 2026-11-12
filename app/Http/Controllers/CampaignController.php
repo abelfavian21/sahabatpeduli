@@ -23,6 +23,8 @@ class CampaignController extends Controller
         $campaign->load('category');
         $donors = $campaign->donations()->where('status', 'paid')->latest()->take(10)->get();
 
-        return view('campaigns.show', compact('campaign', 'donors'));
+        $donorCount = $campaign->donations()->where('status', 'paid')->count();
+
+        return view('campaigns.show', compact('campaign', 'donors', 'donorCount'));
     }
 }

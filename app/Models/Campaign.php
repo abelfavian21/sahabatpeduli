@@ -38,4 +38,9 @@ class Campaign extends Model
     {
         return $this->image ? \Illuminate\Support\Facades\Storage::disk('public')->url($this->image) : null;
     }
+
+    public function getVideoUrlAttribute(): ?string
+    {
+        return $this->video ? \Illuminate\Support\Facades\Storage::disk('public')->url($this->video) : null;
+    }
 }

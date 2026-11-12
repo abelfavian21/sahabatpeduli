@@ -25,3 +25,10 @@ Route::prefix('admin')->name('admin.')->middleware(\App\Http\Middleware\AdminOnl
     Route::get('donations', [\App\Http\Controllers\Admin\DonationController::class, 'index'])->name('donations.index');
     Route::patch('donations/{donation}', [\App\Http\Controllers\Admin\DonationController::class, 'update'])->name('donations.update');
 });
+
+// Berita
+Route::get('/berita', [\App\Http\Controllers\ArticleController::class, 'index'])->name('articles.index');
+Route::get('/berita/{article:slug}', [\App\Http\Controllers\ArticleController::class, 'show'])->name('articles.show');
+Route::prefix('admin')->name('admin.')->middleware(\App\Http\Middleware\AdminOnly::class)->group(function () {
+    Route::resource('articles', \App\Http\Controllers\Admin\ArticleController::class)->except('show');
+});
