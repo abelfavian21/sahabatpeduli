@@ -23,4 +23,19 @@ class DonationController extends Controller
 
         return back()->with('ok', 'Status donasi diperbarui.');
     }
+
+    /** Pratinjau kwitansi di browser (tanpa mengirim email). */
+    public function receipt(Donation $donation)
+    {
+        return view('emails.donation-receipt', ['d' => $donation, 'c' => $donation->campaign, 'o' => config('sahabat')]);
+    }
+
+    public function resend(Donation $donation)
+    {
+        abort_unless($donation->status === 'paid' && $donation->email, 422);
+
+        return $donation->sendReceipt()
+            ? back()->with('ok', 'Kwitansi dikirim ke ' . $donation->email . '.')
+            : back()->with('err', 'Gagal mengirim email. Cek pengaturan MAIL di .env dan storage/logs/laravel.log.');
+    }
 }

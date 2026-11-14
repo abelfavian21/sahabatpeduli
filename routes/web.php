@@ -52,3 +52,13 @@ Route::prefix('admin')->name('admin.')->middleware(\App\Http\Middleware\AdminOnl
     Route::get('requests/{campaignRequest}/file/{type}/{i?}', [$c, 'file'])->name('requests.file');
     Route::delete('requests/{campaignRequest}', [$c, 'destroy'])->name('requests.destroy');
 });
+
+// Halaman statis & hukum
+foreach (['tentang' => 'tentang', 'legalitas' => 'legalitas', 'kebijakan-privasi' => 'privasi', 'syarat-ketentuan' => 'syarat', 'kontak' => 'kontak'] as $uri => $view) {
+    Route::get("/$uri", [\App\Http\Controllers\PageController::class, 'show'])->defaults('page', $view)->name("pages.$view");
+}
+
+Route::prefix('admin')->name('admin.')->middleware(\App\Http\Middleware\AdminOnly::class)->group(function () {
+    Route::get('donations/{donation}/receipt', [\App\Http\Controllers\Admin\DonationController::class, 'receipt'])->name('donations.receipt');
+    Route::post('donations/{donation}/receipt', [\App\Http\Controllers\Admin\DonationController::class, 'resend'])->name('donations.resend');
+});

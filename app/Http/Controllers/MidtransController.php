@@ -36,12 +36,12 @@ class MidtransController extends Controller
             return response()->json(['message' => 'amount mismatch'], 200);
         }
 
+        if (! empty($s['payment_type'])) {
+            $d->update(['payment_type' => $s['payment_type']]); // sebelum markStatus agar tercantum di kwitansi
+        }
         // Notifikasi bisa datang tidak berurutan: abaikan "pending" setelah "paid".
         if (! ($d->status === 'paid' && $new === 'pending')) {
             $d->markStatus($new);
-        }
-        if (! empty($s['payment_type'])) {
-            $d->update(['payment_type' => $s['payment_type']]);
         }
 
         return response()->json(['ok' => true]);
