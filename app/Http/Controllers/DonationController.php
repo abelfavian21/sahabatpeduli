@@ -53,11 +53,11 @@ class DonationController extends Controller
             if (! empty($s['transaction_status'])) {
                 $new = Midtrans::mapStatus($s);
                 $amountOk = $new !== 'paid' || (int) round((float) ($s['gross_amount'] ?? 0)) === (int) $d->amount;
-                if ($amountOk && ! ($d->status === 'paid' && $new === 'pending')) {
-                    $d->markStatus($new);
-                }
                 if (! empty($s['payment_type'])) {
                     $d->update(['payment_type' => $s['payment_type']]);
+                }
+                if ($amountOk && ! ($d->status === 'paid' && $new === 'pending')) {
+                    $d->markStatus($new);
                 }
             }
         }

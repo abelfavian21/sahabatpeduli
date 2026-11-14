@@ -24,6 +24,7 @@
     </aside>
     <main class="p-4 sm:p-8">
         @if(session('ok'))<p class="mb-4 rounded-xl bg-lime-sp px-4 py-3 text-sm">{{ session('ok') }}</p>@endif
+        @if(session('err'))<p class="mb-4 rounded-xl bg-red-100 px-4 py-3 text-sm text-red-800">{{ session('err') }}</p>@endif
         @yield('content')
     </main>
 </div>

@@ -11,7 +11,7 @@
 </div>
 <div class="overflow-x-auto rounded-2xl bg-white">
     <table class="w-full text-left text-sm">
-        <thead class="border-b text-neutral-500"><tr><th class="p-4">Donatur</th><th>Kampanye</th><th>Nominal</th><th>Tanggal</th><th>Status</th></tr></thead>
+        <thead class="border-b text-neutral-500"><tr><th class="p-4">Donatur</th><th>Kampanye</th><th>Nominal</th><th>Tanggal</th><th>Status</th><th>Kwitansi</th></tr></thead>
         <tbody class="divide-y">
         @forelse($donations as $d)
             <tr>
@@ -26,8 +26,17 @@
                         </select>
                     </form>
                 </td>
+                <td class="whitespace-nowrap p-4 text-xs">
+                    @if($d->status === 'paid')
+                        <a href="{{ route('admin.donations.receipt', $d) }}" target="_blank" class="text-brand">Lihat</a>
+                        @if($d->email)
+                            · <form method="post" action="{{ route('admin.donations.resend', $d) }}" class="inline">@csrf<button class="text-brand">{{ $d->receipt_sent_at ? 'Kirim ulang' : 'Kirim' }}</button></form>
+                            @if($d->receipt_sent_at)<p class="mt-1 text-neutral-400">terkirim {{ $d->receipt_sent_at->format('d/m H:i') }}</p>@endif
+                        @else<p class="mt-1 text-neutral-400">tanpa email</p>@endif
+                    @endif
+                </td>
             </tr>
-        @empty <tr><td colspan="5" class="p-6 text-neutral-500">Belum ada donasi.</td></tr>
+        @empty <tr><td colspan="6" class="p-6 text-neutral-500">Belum ada donasi.</td></tr>
         @endforelse
         </tbody>
     </table>

@@ -112,7 +112,7 @@
                 </div>
 
                 <input name="name" placeholder="Nama lengkap" required class="{{ $in }}">
-                <input name="email" type="email" placeholder="Email (untuk kwitansi, opsional)" class="{{ $in }}">
+                <input name="email" type="email" placeholder="Email (kwitansi dikirim ke sini)" class="{{ $in }}">
                 <textarea name="message" rows="2" maxlength="300" placeholder="Doa atau pesan dukungan (opsional)" class="{{ $in }}"></textarea>
 
                 <label class="flex cursor-pointer items-center justify-between rounded-2xl bg-neutral-100 px-4 py-3 text-sm">
